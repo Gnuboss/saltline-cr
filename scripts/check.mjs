@@ -79,7 +79,7 @@ if (cfg.includes('REPLACE_WITH_EMAIL')) warnings.push('Quote form endpoint is st
 if (/affiliateId:\s*''/.test(cfg)) warnings.push('No affiliate ID set (src/config.ts).');
 if (/placeholderPhotos:\s*true/.test(cfg)) warnings.push('Placeholder photos are on.');
 if (/showDraftBadges:\s*true/.test(cfg)) warnings.push('Draft badges are on.');
-if (/site\.saltlinecr|saltlinecr\.com/.test(cfg)) warnings.push('Confirm the production domain in astro.config.mjs and src/config.ts.');
+if (!process.env.SITE_URL && /saltlinecr\.com/.test(cfg)) warnings.push('Confirm the production domain in astro.config.mjs and src/config.ts.');
 const unverified = [...pages].filter(([, h]) => h.includes('Draft: not yet verified')).length;
 if (unverified) warnings.push(`${unverified} pages still show "Draft: not yet verified".`);
 

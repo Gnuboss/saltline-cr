@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "node scripts/check.mjs",
-    "ship": "astro build && node scripts/check.mjs"
+    "ship": "astro build && node scripts/check.mjs",
+    "pages": "astro build && node scripts/check.mjs && node scripts/prefix-base.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0"

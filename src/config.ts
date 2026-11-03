@@ -2,7 +2,7 @@
 export const site = {
   name: 'Salt Line CR',
   tagline: 'Surf, wellness and ocean travel in Costa Rica',
-  url: 'https://saltlinecr.com',
+  url: process.env.SITE_URL || 'https://saltlinecr.com',
 
   // Draft flags: turn both off when facts are verified and real photography is in.
   showDraftBadges: true,
