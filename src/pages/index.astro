@@ -1,13 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
-import DestinationCard from '../components/DestinationCard.astro';
 import { site } from '../config';
-import { loadAll, destPath, regionPath, breakPath, levelText, quoteUrl, absolute } from '../lib/site';
+import { loadAll, destPath, regionPath, breakPath, retreatPath, levelPath, seasonPath, comparePath, levelText, quoteUrl, absolute } from '../lib/site';
 
-const { regions, destinations, breaks, destById } = await loadAll();
-const featured = ['nosara', 'santa-teresa', 'tamarindo'].map((id) => destById.get(id)!);
+const { regions, destinations, breaks, seasons, comparisons, guides, destById } = await loadAll();
 const quote = quoteUrl('/', 'home', 'home');
+
+const lead = breaks.find((b) => b.id === 'playa-guiones')!;
+const leadDest = destById.get(lead.data.destination.id)!;
+const secondary = ['santa-teresa', 'tamarindo'].map((id) => destById.get(id)!);
+const retreats = destinations.filter((d) => d.data.retreat);
+const signupNext = new URL('/subscribed/', site.url).toString();
+const placeholder = site.quote.endpoint.includes('REPLACE');
 
 const schema = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: absolute('/') },
@@ -23,11 +28,11 @@ const schema = [
   <!--
     DOM ORDER vs VISUAL ORDER
     The taxonomy (#guide) is first in the source so crawlers and answer engines read the
-    region and destination hierarchy first. CSS `order` puts the hero and booking modules on top
-    for visitors. Nothing is hidden.
+    region and destination hierarchy first. CSS `order` puts the masthead, cover story and
+    booking modules on top for visitors. Nothing is hidden.
   -->
   <main id="main" class="stack">
-    <section class="guide-block o6" id="guide" aria-labelledby="guide-h">
+    <section class="guide-block o7" id="guide" aria-labelledby="guide-h">
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">The guide</span>
@@ -57,76 +62,152 @@ const schema = [
       </div>
     </section>
 
-    <section class="hero o1" aria-labelledby="hero-h">
-      <Photo seed="home-hero" alt="Placeholder photo of a surfer at a Costa Rica beach at golden hour" ratio="4/3" width={1600} eager />
-      <div class="wrap hero-content">
-        <span class="eyebrow">Costa Rica · Surf, yoga and wellness</span>
-        <h1 id="hero-h">Find your <em>break.</em><br />Plan it with locals.</h1>
-        <p class="hero-sub">Surf and wellness trips along Costa Rica's Pacific and Caribbean coasts, matched to your level and planned with a Costa Rica travel agency.</p>
+    <section class="masthead o1" aria-labelledby="hero-h">
+      <div class="wrap masthead-inner">
+        <div>
+          <span class="eyebrow">Costa Rica · Surf, yoga and wellness</span>
+          <h1 id="hero-h">Find your <em>break.</em> Plan it with locals.</h1>
+          <p class="hero-sub">Surf and wellness trips along Costa Rica's Pacific and Caribbean coasts, matched to your level and planned with a Costa Rica travel agency.</p>
+        </div>
         <div class="hero-actions">
           <a class="btn btn-primary" href={quote} data-track="quote" data-template="home" data-entity="home">Get a trip quote</a>
-          <a class="btn btn-ghost" href="#break-index">See the break index</a>
+          <a class="btn btn-ghost" href="/surf/">Browse the surf guide</a>
         </div>
       </div>
     </section>
 
-    <section class="index-band o2" id="break-index" aria-labelledby="idx-h">
-      <div class="wrap">
-        <div class="index-head">
-          <h2 id="idx-h">Break index</h2>
-          <p class="index-note">Named breaks, listed the way a local surf guide would brief a visitor. Details are drafts until verified.</p>
-        </div>
-        <table class="index">
-          <thead>
-            <tr><th scope="col">Break</th><th scope="col">Type</th><th scope="col">Level</th><th scope="col">Access</th></tr>
-          </thead>
-          <tbody>
+    <section class="cover o2" aria-labelledby="cover-h">
+      <div class="wrap cover-grid">
+        <div class="cover-main">
+          <h2 id="cover-h" class="visually-hidden">Featured</h2>
+          <a class="cover-lead" href={breakPath(lead, leadDest)}>
+            <Photo seed="home-lead" alt="Placeholder photo of Playa Guiones, Nosara" ratio="16/10" width={1200} eager />
+            <span class="kicker">Featured break · {leadDest.data.name}</span>
+            <span class="cover-title">{lead.data.name}</span>
+            <span class="cover-sum">{lead.data.summary}</span>
+          </a>
+          <div class="cover-pair">
             {
-              breaks.map((b) => {
+              secondary.map((d) => (
+                <a class="cover-card" href={destPath(d)}>
+                  <Photo seed={`dest-${d.id}`} alt={`Placeholder photo for ${d.data.name}`} ratio="3/2" width={600} />
+                  <span class="kicker">{regions.find((r) => r.id === d.data.region.id)?.data.name}</span>
+                  <span class="card-title">{d.data.name}</span>
+                  <span class="cover-sum">{d.data.summary}</span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <aside class="cover-index" aria-labelledby="idx-h">
+          <h2 id="idx-h">Break index</h2>
+          <p class="index-note">Named breaks, briefed the way a local would. Details are drafts until verified.</p>
+          <ol class="top-list">
+            {
+              breaks.map((b, i) => {
                 const d = destById.get(b.data.destination.id)!;
                 const href = b.data.page ? breakPath(b, d) : destPath(d);
                 return (
-                  <tr>
-                    <td>
-                      <a href={href}>
-                        <span class="idx-name">{b.data.name}</span>
-                        <span class="idx-sub">{d.data.name} · {regions.find((r) => r.id === d.data.region.id)?.data.name}</span>
-                      </a>
-                    </td>
-                    <td>{b.data.type}</td>
-                    <td>{levelText(b.data.level)}</td>
-                    <td>{b.data.access}</td>
-                  </tr>
+                  <li>
+                    <a href={href}>
+                      <span class="top-num" aria-hidden="true">{i + 1}</span>
+                      <span class="top-body">
+                        <span class="kicker">{d.data.name}</span>
+                        <span class="top-title">{b.data.name}</span>
+                        <span class="top-meta">{b.data.type} · {levelText(b.data.level)}</span>
+                      </span>
+                    </a>
+                  </li>
                 );
               })
             }
-          </tbody>
-        </table>
+          </ol>
+          <a class="more" href="/surf/">All regions and destinations</a>
+        </aside>
       </div>
     </section>
 
-    <section class="section o3" aria-labelledby="start-h">
+    <section class="section o3" aria-labelledby="sections-h">
       <div class="wrap">
         <div class="section-head">
-          <span class="eyebrow">Where to start</span>
-          <h2 id="start-h">Three good bases for a first trip</h2>
+          <span class="eyebrow">By coast</span>
+          <h2 id="sections-h">Surf Costa Rica, section by section</h2>
         </div>
-        <div class="grid grid-3">
-          {featured.map((d) => <DestinationCard dest={d} />)}
+        <div class="modules">
+          {
+            regions.map((r) => {
+              const list = destinations.filter((d) => d.data.region.id === r.id);
+              return (
+                <article class="module">
+                  <a class="module-lead" href={regionPath(r)}>
+                    <Photo seed={`region-${r.id}`} alt={`Placeholder photo for ${r.data.name}`} ratio="3/2" width={640} />
+                    <span class="module-title">{r.data.name}</span>
+                  </a>
+                  <p class="module-sum">{r.data.summary}</p>
+                  <ul class="module-list">
+                    {list.slice(0, 4).map((d) => (
+                      <li><a href={destPath(d)}><strong>{d.data.name}</strong><span>{d.data.surfStyle}</span></a></li>
+                    ))}
+                  </ul>
+                  <a class="more" href={regionPath(r)}>See more in {r.data.name}</a>
+                </article>
+              );
+            })
+          }
+          <article class="module module-wellness">
+            <a class="module-lead" href="/retreats/">
+              <Photo seed="retreats-home" alt="Placeholder photo of a yoga class by the ocean" ratio="3/2" width={640} />
+              <span class="module-title">Surf and wellness</span>
+            </a>
+            <p class="module-sum">Surf in the morning, then yoga, spa time or rest. Three destinations are known for the pairing.</p>
+            <ul class="module-list">
+              {retreats.map((d) => (
+                <li><a href={retreatPath(d)}><strong>{d.data.name}</strong><span>{d.data.wellness}</span></a></li>
+              ))}
+            </ul>
+            <a class="more" href="/retreats/">See more retreats</a>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="o4" aria-label="Surf regions">
-      <div class="strip">
-        {
-          regions.map((r) => (
-            <a href={regionPath(r)}>
-              <Photo seed={`region-${r.id}`} alt={`Placeholder photo for ${r.data.name}`} ratio="3/4" width={480} />
-              <span class="label">{r.data.name}</span>
-            </a>
-          ))
-        }
+    <section class="plan o4" aria-labelledby="plan-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Plan your trip</span>
+          <h2 id="plan-h">Narrow it down</h2>
+        </div>
+        <div class="plan-grid">
+          <div>
+            <h3>By level</h3>
+            <ul class="link-list">
+              <li><a href={levelPath('beginner')}><strong>Beginner breaks</strong></a></li>
+              <li><a href={levelPath('intermediate')}><strong>Intermediate breaks</strong></a></li>
+              <li><a href={levelPath('advanced')}><strong>Advanced and expert breaks</strong></a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>By season</h3>
+            <ul class="link-list">
+              {seasons.map((s) => <li><a href={seasonPath(s)}><strong>{s.data.name}</strong><span>{s.data.months}</span></a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>Compare</h3>
+            <ul class="link-list">
+              {comparisons.map((c) => (
+                <li><a href={comparePath(c)}><strong>{destById.get(c.data.a.id)?.data.name} vs {destById.get(c.data.b.id)?.data.name}</strong></a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Guides</h3>
+            <ul class="link-list">
+              {guides.map((g) => <li><a href={`/surf/guides/${g.id}/`}><strong>{g.data.title}</strong></a></li>)}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -141,6 +222,39 @@ const schema = [
           <a class="btn btn-primary" href={quote} data-track="quote" data-template="home" data-entity="home-trust">Get a trip quote</a>
           <a class="btn btn-ghost" href="/how-we-work/">How we work</a>
         </div>
+      </div>
+    </section>
+
+    <section class="signup o6" aria-labelledby="signup-h">
+      <div class="wrap signup-inner">
+        <div class="signup-copy">
+          <span class="eyebrow">Not ready for a quote?</span>
+          <h2 id="signup-h">Occasional swell-season notes</h2>
+          <p>Leave your email and we will send seasonal tips and trip ideas now and then. No quote request is sent.</p>
+        </div>
+        <form class="signup-form" method="POST" action={site.quote.endpoint} data-quote>
+          {placeholder && <p class="form-warn">Setup needed: set the form endpoint in <code>src/config.ts</code>.</p>}
+          <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+          <label class="consent">
+            <input type="checkbox" name="consent" value="yes" required />
+            <span>I agree to receive occasional emails from {site.name}. See the <a href="/privacy/">privacy page</a>.</span>
+          </label>
+          <button class="btn btn-primary" type="submit">Send me the notes</button>
+          <input type="hidden" name="signup_type" value="season-notes" />
+          <input type="hidden" name="source_page" value="/" />
+          <input type="hidden" name="template" value="home" />
+          <input type="hidden" name="entity" value="signup" />
+          <input type="hidden" name="landing_page" />
+          <input type="hidden" name="utm_source" />
+          <input type="hidden" name="utm_medium" />
+          <input type="hidden" name="utm_campaign" />
+          <input type="hidden" name="utm_content" />
+          <input type="hidden" name="referrer" />
+          <input type="hidden" name="_subject" value="New Salt Line CR email signup" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_next" value={signupNext} />
+          <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        </form>
       </div>
     </section>
   </main>

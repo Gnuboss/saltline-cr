@@ -1,7 +1,7 @@
 # Salt Line CR
 
 Costa Rica surf and wellness travel guide. Astro 5, static output, no client framework.
-Phase 1 prototype: tracked affiliate links plus a quote form that emails leads.
+Phase 1 prototype: tracked affiliate links, a quote form and an email signup that both land in one inbox.
 
 ## Run it
 
@@ -56,3 +56,7 @@ Links to the partner carry `utm_source=saltline`, `utm_medium=referral`, `utm_ca
 ## Phase 2
 
 Call tracking, CRM handoff, and booked-or-not reporting back from the partner. Also stays, programs and trips (the content collections exist and are empty).
+
+## Homepage
+
+Magazine layout: masthead, cover story with a numbered break index, section modules by coast, planning links, a trust band and an email signup. The signup posts to the same inbox as the quote form (subject "New Salt Line CR email signup"), so move it to an email provider before sending any mail to the list.
