@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'How we work', path: '/how-we-work/' }];
+---
+<Base
+  title="How we work and affiliate disclosure"
+  path="/how-we-work/"
+  description={`How ${site.name} makes money, how we write our guides and how we check our facts.`}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">How we work</span>
+      <h1>How we work</h1>
+      <p class="lede">{site.name} earns a commission when travelers book through our travel partner. It costs you nothing extra, and it is how we pay for the site.</p>
+    </header>
+    <section class="section prose">
+      <h2>Affiliate disclosure</h2>
+      <p>Some links on this site go to {site.partner.name}, a Costa Rica travel agency. These are affiliate links: if you book after clicking one, or after sending a request through our quote form, we may earn a commission. The price you pay does not change.</p>
+      <h2>How we write</h2>
+      <p>We write our own guides. Where we draw on information from our travel partner, we rewrite it in our own words and add context such as skill levels, seasons and comparisons. Guides are organized by region, destination and break so you can find what you need quickly.</p>
+      <h2>How we check facts</h2>
+      <p>Facts about breaks, levels, seasons and access are checked with our travel partner, and each page shows when it was last verified. Surf conditions change daily, so always ask a local surf school or guide about the day's swell, tide and wind before you paddle out.</p>
+      <h2>Your data</h2>
+      <p>If you send a quote request, your details are shared with our travel partner so they can reply. See the <a href="/privacy/">privacy page</a>.</p>
+    </section>
+  </main>
+</Base>

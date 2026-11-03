@@ -1,0 +1,94 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import CtaBand from '../../../../components/CtaBand.astro';
+import FactTable from '../../../../components/FactTable.astro';
+import { loadAll, breakFacts, breakPath, destPath, regionPath, levelText, absolute, retreatPath } from '../../../../lib/site';
+
+// Only breaks flagged `page: true` get their own URL. The thin-page rule (6+ filled facts and
+// roughly 250 words of original copy) is enforced in scripts/check.mjs.
+export async function getStaticPaths() {
+  const { breaks, destById } = await loadAll();
+  return breaks
+    .filter((b) => b.data.page)
+    .map((b) => {
+      const d = destById.get(b.data.destination.id)!;
+      return {
+        params: { region: d.data.region.id, destination: d.id, break: b.id },
+        props: { b, dest: d },
+      };
+    });
+}
+
+const { b, dest } = Astro.props;
+const { regionById, breaks } = await loadAll();
+const region = regionById.get(dest.data.region.id)!;
+const path = breakPath(b, dest);
+const others = breaks.filter((x) => x.data.destination.id === dest.id && x.id !== b.id);
+
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: region.data.name, path: regionPath(region) },
+  { name: dest.data.name, path: destPath(dest) },
+  { name: b.data.name, path },
+];
+const place = {
+  '@context': 'https://schema.org',
+  '@type': 'Place',
+  name: b.data.name,
+  description: b.data.summary,
+  url: absolute(path),
+  containedInPlace: { '@type': 'Place', name: `${dest.data.name}, Costa Rica` },
+};
+---
+<Base
+  title={`${b.data.name}, ${dest.data.name}: surf break guide`}
+  path={path}
+  description={b.data.summary}
+  breadcrumbs={crumbs}
+  schema={[place]}
+>
+  <main id="main" class="wrap stack">
+    <header class="page-head o1">
+      <span class="eyebrow">{dest.data.name} · {region.data.name}</span>
+      <h1>{b.data.name}</h1>
+      <p class="lede">{b.data.summary}</p>
+    </header>
+
+    <section class="section o3" aria-labelledby="facts-h">
+      <h2 id="facts-h" class="section-head">Break facts</h2>
+      <FactTable rows={breakFacts(b)} verified={b.data.verified} />
+    </section>
+
+    <section class="section o4 prose" aria-labelledby="guide-h">
+      <h2 id="guide-h">Surfing {b.data.name}</h2>
+      {b.data.body.map((p) => <p>{p}</p>)}
+      <p>
+        More in {dest.data.name}: <a href={destPath(dest)}>the {dest.data.name} surf guide</a>
+        {dest.data.retreat && <> and the <a href={retreatPath(dest)}>surf and wellness guide</a></>}.
+      </p>
+    </section>
+
+    {
+      others.length > 0 && (
+        <section class="section o5">
+          <h2 class="section-head">Other breaks at {dest.data.name}</h2>
+          <ul class="link-list">
+            {others.map((o) => <li><a href={destPath(dest) + '#' + o.id}><strong>{o.data.name}</strong><span>{o.data.summary}</span></a></li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section o2">
+      <CtaBand
+        heading={`Surf ${b.data.name} on a planned trip`}
+        text="Tell us your level and dates and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="break"
+        entity={b.id}
+        partnerPath={dest.data.partnerPath}
+      />
+    </section>
+  </main>
+</Base>

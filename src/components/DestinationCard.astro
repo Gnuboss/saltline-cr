@@ -1,0 +1,19 @@
+---
+import Photo from './Photo.astro';
+import { destPath, levelText } from '../lib/site';
+import type { Destination } from '../lib/site';
+
+interface Props { dest: Destination; ratio?: string }
+const { dest, ratio = '4/3' } = Astro.props;
+---
+<a class="card" href={destPath(dest)}>
+  <Photo seed={`dest-${dest.id}`} alt={`Placeholder photo for ${dest.data.name}`} ratio={ratio} width={640} />
+  <div class="card-body">
+    <h3>{dest.data.name}</h3>
+    <p>{dest.data.summary}</p>
+    <div class="chips">
+      <span class="chip">{levelText(dest.data.levelMix)}</span>
+      {dest.data.retreat && <span class="chip chip-wellness">Surf and wellness</span>}
+    </div>
+  </div>
+</a>

@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { loadAll, guidePath, destPath, absolute } from '../../../lib/site';
+import { site } from '../../../config';
+
+export async function getStaticPaths() {
+  const { guides } = await loadAll();
+  return guides.map((g) => ({ params: { slug: g.id }, props: { guide: g } }));
+}
+
+const { guide } = Astro.props;
+const { destById } = await loadAll();
+const { Content } = await render(guide);
+const path = guidePath(guide);
+const related = guide.data.related.map((r) => destById.get(r.id)).filter(Boolean);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: 'Guides', path: '/surf/guides/' },
+  { name: guide.data.title, path },
+];
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.data.title,
+  description: guide.data.description,
+  dateModified: guide.data.updated,
+  mainEntityOfPage: absolute(path),
+  publisher: { '@type': 'Organization', name: site.name },
+};
+---
+<Base title={guide.data.title} path={path} description={guide.data.description} breadcrumbs={crumbs} schema={[article]}>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Guide</span>
+      <h1>{guide.data.title}</h1>
+      <p class="lede">{guide.data.description}</p>
+    </header>
+
+    <article class="section prose">
+      <Content />
+    </article>
+
+    {
+      related.length > 0 && (
+        <section class="section">
+          <h2 class="section-head">Destinations mentioned</h2>
+          <ul class="link-list">
+            {related.map((d) => <li><a href={destPath(d!)}><strong>{d!.data.name}</strong><span>{d!.data.summary}</span></a></li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section">
+      <CtaBand
+        heading="Plan it with a local agency"
+        text="Tell us your level, dates and interests, and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="guide"
+        entity={guide.id}
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

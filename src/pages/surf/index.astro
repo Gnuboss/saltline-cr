@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { loadAll, destPath, regionPath, levelText, seasonPath, comparePath, guidePath } from '../../lib/site';
+
+const { regions, destinations, seasons, comparisons, guides } = await loadAll();
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Surf', path: '/surf/' }];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Surf Costa Rica',
+    description: 'Costa Rica surf by region, destination, skill level and season.',
+  },
+];
+---
+<Base
+  title="Surf Costa Rica: regions, breaks and seasons"
+  path="/surf/"
+  description="Costa Rica has surf on two coasts and five regions. Find the right region, destination and break by skill level and season."
+  breadcrumbs={crumbs}
+  schema={schema}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Surf</span>
+      <h1>Surf Costa Rica</h1>
+      <p class="lede">Costa Rica has surf on two coasts and five regions, from Guanacaste's beginner-friendly beach breaks to the long left at Pavones and the expert reef at Salsa Brava. Start with the region, then narrow by level and season.</p>
+    </header>
+
+    <section class="section" aria-labelledby="regions-h">
+      <h2 id="regions-h" class="section-head">Regions</h2>
+      {
+        regions.map((r) => (
+          <div class="region-block">
+            <h2><a href={regionPath(r)}>{r.data.name}</a></h2>
+            <p>{r.data.summary}</p>
+            <ul class="dest-list">
+              {destinations
+                .filter((d) => d.data.region.id === r.id)
+                .map((d) => (
+                  <li>
+                    <a href={destPath(d)}>
+                      <strong>{d.data.name}</strong>
+                      <span>{d.data.surfStyle} · {levelText(d.data.levelMix)}</span>
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="section grid grid-2" aria-label="Plan by level and season">
+      <div>
+        <h2 class="section-head">By skill level</h2>
+        <ul class="link-list">
+          <li><a href="/surf/by-level/beginner/"><strong>Beginner breaks</strong><span>Sandy beach breaks and places with plenty of lessons.</span></a></li>
+          <li><a href="/surf/by-level/intermediate/"><strong>Intermediate breaks</strong><span>More power and more variety for surfers who can already read a wave.</span></a></li>
+          <li><a href="/surf/by-level/advanced/"><strong>Advanced and expert breaks</strong><span>Long point waves, shallow reef and heavier beach breaks.</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="section-head">By season</h2>
+        <ul class="link-list">
+          {seasons.map((s) => <li><a href={seasonPath(s)}><strong>{s.data.name}, {s.data.months}</strong><span>{s.data.summary}</span></a></li>)}
+          {comparisons.map((c) => <li><a href={comparePath(c)}><strong>Compare destinations</strong><span>Nosara vs Santa Teresa, side by side.</span></a></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="more-h">
+      <h2 id="more-h" class="section-head">More ways in</h2>
+      <ul class="link-list">
+        <li><a href="/retreats/"><strong>Surf and wellness retreats</strong><span>Pair surf with yoga, spas and wellness in Nosara, Santa Teresa and Uvita.</span></a></li>
+        {guides.map((g) => <li><a href={guidePath(g)}><strong>{g.data.title}</strong><span>{g.data.description}</span></a></li>)}
+      </ul>
+    </section>
+
+    <section class="section">
+      <CtaBand
+        heading="Not sure where to start?"
+        text="Tell us your level, dates and what else you want from the trip, and we pass your request to our Costa Rica travel partner."
+        from="/surf/"
+        template="surf-hub"
+        entity="surf"
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

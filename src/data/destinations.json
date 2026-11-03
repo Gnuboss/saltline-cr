@@ -1,0 +1,227 @@
+[
+  {
+    "id": "tamarindo",
+    "name": "Tamarindo",
+    "region": "guanacaste",
+    "order": 1,
+    "summary": "Tamarindo is Guanacaste's main surf town, with a quieter southern end for beginners and bigger swells for stronger surfers.",
+    "body": [
+      "Tamarindo has a large choice of surf schools, board rentals and places to stay, which makes it the easiest base for a first surf trip on the north Pacific coast. The beach is wide and sandy, and lessons run daily. Nearby Playa Langosta and Playa Grande offer alternatives when Tamarindo is crowded or small.",
+      "It is also the departure point for boat trips to Witch's Rock and Ollie's Point in Santa Rosa National Park, so surfers can pair easy lessons with a day at two of Costa Rica's best-known breaks."
+    ],
+    "levelMix": ["beginner", "intermediate", "advanced"],
+    "surfStyle": "Beach breaks",
+    "nearestAirport": "Liberia (LIR)",
+    "bestFor": "First surf trips, and a base for boat trips",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "avellanas",
+    "name": "Avellanas",
+    "region": "guanacaste",
+    "order": 2,
+    "summary": "Avellanas is a quieter beach near Tamarindo where a beach break, a river mouth and a reef break sit within a short walk of each other.",
+    "body": [
+      "The variety is the draw: surfers can move between three different types of wave without leaving the beach, which suits intermediates ready to try different conditions.",
+      "It works as a day trip from Tamarindo, or as a base of its own for people who want a quieter setting than Tamarindo."
+    ],
+    "levelMix": ["intermediate", "advanced"],
+    "surfStyle": "Beach, river-mouth and reef breaks",
+    "nearestAirport": "Liberia (LIR)",
+    "bestFor": "Intermediates who want variety close together",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "santa-rosa-np",
+    "name": "Santa Rosa National Park",
+    "region": "guanacaste",
+    "order": 3,
+    "summary": "Santa Rosa National Park is home to Witch's Rock and Ollie's Point, two famous breaks reached by boat from Tamarindo.",
+    "body": [
+      "Both breaks are normally reached by boat, so a visit is a planned boat day rather than a drop-in session. Conditions on the day decide which break is worth the ride.",
+      "Plan these as day trips from Tamarindo, and take advice from the boat crew on swell and tide before you commit."
+    ],
+    "levelMix": ["intermediate", "advanced"],
+    "surfStyle": "Boat-access beach and point breaks",
+    "nearestAirport": "Liberia (LIR)",
+    "bestFor": "Experienced surfers who want a boat day",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "nosara",
+    "name": "Nosara",
+    "region": "nicoya",
+    "order": 1,
+    "summary": "Nosara, on the Nicoya Peninsula, is known for Playa Guiones, a consistent beach break, and for pairing surf with yoga and wellness.",
+    "body": [
+      "Playa Guiones is a long sandy beach with waves breaking left and right along its length, so surfers spread out rather than queue for one peak. Surf is consistent through the year, which is why the town suits both first-timers and surfers building up.",
+      "Nosara is also a wellness destination. Yoga classes, retreats and spa treatments are part of the local scene, and many visitors combine a morning surf with an afternoon class."
+    ],
+    "levelMix": ["beginner", "intermediate"],
+    "surfStyle": "Sand-bottom beach break",
+    "nearestAirport": "Liberia (LIR)",
+    "bestFor": "Consistent waves with yoga and wellness",
+    "wellness": "Yoga classes, retreats and spas",
+    "retreat": true,
+    "themes": ["surf", "yoga", "wellness"],
+    "partnerPath": "/nosara/",
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "santa-teresa",
+    "name": "Santa Teresa",
+    "region": "nicoya",
+    "order": 2,
+    "summary": "Santa Teresa, at the southern end of the Nicoya Peninsula, has intermediate and advanced breaks with some room for beginners, and a strong surf-and-wellness scene.",
+    "body": [
+      "The waves here lean toward intermediate and advanced surfers, although beginners can find gentler sections and lessons.",
+      "Like Nosara, Santa Teresa pairs surf with yoga programs and spas, which makes it a natural choice for a surf-and-wellness week."
+    ],
+    "levelMix": ["beginner", "intermediate", "advanced"],
+    "surfStyle": "Beach breaks",
+    "nearestAirport": "Liberia (LIR) or San José (SJO)",
+    "bestFor": "Surfers with some experience who want wellness too",
+    "wellness": "Yoga programs and spas",
+    "retreat": true,
+    "themes": ["surf", "yoga", "wellness"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "jaco",
+    "name": "Jacó",
+    "region": "central-pacific",
+    "order": 1,
+    "summary": "Jacó is the Central Pacific's main surf town and the easiest surf base from San José.",
+    "body": [
+      "Jacó is close to the capital and has a long beach with waves for beginners and intermediates, plus lessons and rentals along the beachfront.",
+      "It is a practical choice for short trips, and a gateway to quieter beaches to the south and the heavier breaks at Playa Hermosa."
+    ],
+    "levelMix": ["beginner", "intermediate"],
+    "surfStyle": "Beach breaks",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Short trips from San José",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "playa-hermosa-jaco",
+    "name": "Playa Hermosa (Jacó)",
+    "region": "central-pacific",
+    "order": 2,
+    "summary": "Playa Hermosa, just south of Jacó, is a heavier beach break best suited to experienced surfers.",
+    "body": [
+      "Hermosa is known for powerful waves over a sandy bottom, which makes it better for intermediate and advanced surfers than for first sessions. Beginners are usually better served at Jacó."
+    ],
+    "levelMix": ["intermediate", "advanced"],
+    "surfStyle": "Beach break",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Experienced surfers near San José",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "esterillos",
+    "name": "Esterillos",
+    "region": "central-pacific",
+    "order": 3,
+    "summary": "Esterillos is a stretch of quieter beach breaks south of Jacó.",
+    "body": [
+      "Esterillos suits surfers who want open beach breaks and a calmer town than Jacó. There are several beaches along the stretch, so it pays to ask locally which section is working."
+    ],
+    "levelMix": ["beginner", "intermediate"],
+    "surfStyle": "Beach breaks",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Open beach breaks away from the main town",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "caldera",
+    "name": "Caldera (Barranca)",
+    "region": "central-pacific",
+    "order": 4,
+    "summary": "Caldera, near Puntarenas, is the access point for Barranca, a river-mouth wave known for its long left.",
+    "body": [
+      "Barranca is one of the Central Pacific's best-known waves, a long left that suits surfers who are comfortable with a long ride and with line-up etiquette. Most visitors treat it as a surf stop on a longer route rather than a base."
+    ],
+    "levelMix": ["intermediate", "advanced"],
+    "surfStyle": "River-mouth left",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Experienced surfers chasing a long left",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "dominical",
+    "name": "Dominical",
+    "region": "south-pacific",
+    "order": 1,
+    "summary": "Dominical has beach breaks split by a river, with early-breaking waves that work for beginners.",
+    "body": [
+      "The river divides the beach into separate sections, so surfers can choose a spot that matches their level. Dominicalito, next door, adds more beginner-friendly waves.",
+      "The town is the main surf base on this stretch of the South Pacific and an easy stop between the Central Pacific and Uvita."
+    ],
+    "levelMix": ["beginner", "intermediate"],
+    "surfStyle": "River-split beach breaks",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Beginners and intermediates on the South Pacific",
+    "themes": ["surf"],
+    "partnerPath": "/dominical/",
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "uvita",
+    "name": "Uvita",
+    "region": "south-pacific",
+    "order": 2,
+    "summary": "Uvita, on the South Pacific coast, pairs beach surf with jungle, yoga and a relaxed pace.",
+    "body": [
+      "Uvita is a base for travelers who want surf as one part of a wider trip: jungle, beaches and yoga are all within reach. Surf is one part of the offer here rather than the whole reason to visit."
+    ],
+    "levelMix": ["beginner", "intermediate"],
+    "surfStyle": "Beach breaks",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Surf as one part of a jungle and yoga trip",
+    "wellness": "Yoga alongside jungle and beach",
+    "retreat": true,
+    "themes": ["surf", "yoga", "wellness"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "pavones",
+    "name": "Pavones",
+    "region": "south-pacific",
+    "order": 3,
+    "summary": "Pavones, on the Golfo Dulce, is known for a very long left-hand wave and a remote setting.",
+    "body": [
+      "Pavones is a destination for surfers who are comfortable with a long point wave and willing to travel. The drive from the airport is long, so plan extra days rather than squeezing it into a short trip.",
+      "It suits people who care more about the wave than the town, and it is best for experienced surfers."
+    ],
+    "levelMix": ["advanced"],
+    "surfStyle": "Long left-hand point break",
+    "nearestAirport": "San José (SJO), then a long drive",
+    "bestFor": "Experienced surfers who want one great wave",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "puerto-viejo",
+    "name": "Puerto Viejo",
+    "region": "caribbean",
+    "order": 1,
+    "summary": "Puerto Viejo, on the Caribbean coast, is home to Salsa Brava, a powerful reef break for experts.",
+    "body": [
+      "Salsa Brava breaks over shallow reef, and many surfers wear helmets. It is a wave to watch before you paddle out, and expert-only by reputation.",
+      "The town has boutique hotels and a Caribbean feel that is quite different from the Pacific coast, which makes it a good add-on for travelers with a few extra days."
+    ],
+    "levelMix": ["advanced"],
+    "surfStyle": "Reef break",
+    "nearestAirport": "San José (SJO)",
+    "bestFor": "Expert surfers and Caribbean add-ons",
+    "themes": ["surf"],
+    "updated": "2026-11-02"
+  }
+]

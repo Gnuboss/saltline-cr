@@ -1,0 +1,66 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import FactTable from '../../../components/FactTable.astro';
+import { loadAll, seasonPath, regionPath } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const { seasons } = await loadAll();
+  return seasons.map((s) => ({ params: { season: s.id }, props: { season: s } }));
+}
+
+const { season } = Astro.props;
+const { seasons, regions } = await loadAll();
+const other = seasons.find((s) => s.id !== season.id)!;
+const path = seasonPath(season);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: season.data.name, path },
+];
+---
+<Base
+  title={`Surfing in Costa Rica in the ${season.data.name.toLowerCase()} (${season.data.months})`}
+  path={path}
+  description={season.data.summary}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Best time to surf</span>
+      <h1>{season.data.name}: {season.data.months}</h1>
+      <p class="lede">{season.data.summary}</p>
+    </header>
+
+    <section class="section prose" aria-labelledby="what-h">
+      <h2 id="what-h">What to expect</h2>
+      {season.data.body.map((p) => <p>{p}</p>)}
+      <p>Compare with the <a href={seasonPath(other)}>{other.data.name.toLowerCase()}, {other.data.months}</a>.</p>
+    </section>
+
+    <section class="section" aria-labelledby="regions-h">
+      <h2 id="regions-h" class="section-head">By region</h2>
+      <ul class="link-list">
+        {regions.map((r) => <li><a href={regionPath(r)}><strong>{r.data.name}</strong><span>{r.data.season}</span></a></li>)}
+      </ul>
+    </section>
+
+    <section class="section">
+      <FactTable
+        caption="Season at a glance"
+        rows={[['Season', season.data.name], ['Months', season.data.months]]}
+      />
+    </section>
+
+    <section class="section">
+      <CtaBand
+        heading="Plan around the season"
+        text="Tell us when you can travel and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="best-time"
+        entity={season.id}
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

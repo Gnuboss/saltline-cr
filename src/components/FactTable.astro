@@ -1,0 +1,28 @@
+---
+import { site } from '../config';
+
+interface Props {
+  rows: [string, string | undefined | null][];
+  caption?: string;
+  verified?: string | null;
+}
+const { rows, caption, verified = null } = Astro.props;
+const filled = rows.filter(([, v]) => v);
+---
+<table class="facts">
+  {caption && <caption>{caption}</caption>}
+  <tbody>
+    {filled.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}
+  </tbody>
+  {
+    (verified || site.showDraftBadges) && (
+      <tfoot>
+        <tr>
+          <td colspan="2" class={verified ? 'verified' : 'unverified'}>
+            {verified ? `Last verified ${verified}` : 'Draft: not yet verified with our travel partner'}
+          </td>
+        </tr>
+      </tfoot>
+    )
+  }
+</table>

@@ -1,0 +1,25 @@
+[
+  {
+    "id": "dry-season",
+    "name": "Dry season",
+    "months": "December to April",
+    "summary": "The dry season brings sunnier weather and light morning winds on much of the Pacific coast, and it is the busiest time for travelers.",
+    "body": [
+      "Dry-season surf is generally cleaner in the mornings, while swell tends to be smaller on much of the Pacific coast than in the green season. Beginners often prefer this window for its gentler waves and reliable weather.",
+      "On the Caribbean coast, the northern-hemisphere winter months are the usual window for Salsa Brava, which is why experienced surfers plan Puerto Viejo trips for December to March.",
+      "Because this is peak travel season, book flights, stays and lessons early, especially around the holidays."
+    ],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "green-season",
+    "name": "Green season",
+    "months": "May to November",
+    "summary": "The green season brings bigger, more consistent Pacific swells, afternoon showers and fewer visitors.",
+    "body": [
+      "Most of the Pacific coast's larger swells arrive in these months, which suits intermediate and advanced surfers and long waves such as Pavones. Mornings are usually the best time to surf, before afternoon showers and onshore winds.",
+      "Travelers who are happy to plan around the weather often find it a good time for surf-and-wellness trips, with lower demand for stays and lessons."
+    ],
+    "updated": "2026-11-02"
+  }
+]

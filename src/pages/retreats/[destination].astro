@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import FactTable from '../../components/FactTable.astro';
+import { loadAll, retreatPath, destPath, levelText } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const { destinations } = await loadAll();
+  return destinations.filter((d) => d.data.retreat).map((d) => ({ params: { destination: d.id }, props: { dest: d } }));
+}
+
+const { dest } = Astro.props;
+const { destinations } = await loadAll();
+const others = destinations.filter((d) => d.data.retreat && d.id !== dest.id);
+const path = retreatPath(dest);
+const wellness = (dest.data.wellness ?? '').toLowerCase();
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Retreats', path: '/retreats/' },
+  { name: dest.data.name, path },
+];
+---
+<Base
+  title={`Surf and wellness in ${dest.data.name}, Costa Rica`}
+  path={path}
+  description={`${dest.data.name} suits travelers who want to surf in the morning and spend the day on yoga and wellness.`}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap stack">
+    <header class="page-head o1">
+      <span class="eyebrow">Retreats</span>
+      <h1>Surf and wellness in {dest.data.name}</h1>
+      <p class="lede">{dest.data.name} suits travelers who want to surf in the morning and spend the rest of the day on yoga, spa time or rest. Wellness here means {wellness}.</p>
+    </header>
+
+    <section class="section o3" aria-labelledby="glance-h">
+      <h2 id="glance-h" class="section-head">At a glance</h2>
+      <FactTable
+        rows={[
+          ['Surf', `${dest.data.surfStyle}, ${levelText(dest.data.levelMix).toLowerCase()}`],
+          ['Wellness', dest.data.wellness],
+          ['Best for', dest.data.bestFor],
+          ['Nearest airport', dest.data.nearestAirport],
+        ]}
+        verified={dest.data.verified}
+      />
+    </section>
+
+    <section class="section o4 prose" aria-labelledby="week-h">
+      <h2 id="week-h">A surf-and-wellness week in {dest.data.name}</h2>
+      {dest.data.body.map((p) => <p>{p}</p>)}
+      <p>Read the full <a href={destPath(dest)}>{dest.data.name} surf guide</a> for breaks, levels and nearby destinations.</p>
+      <h3>What to ask before you book</h3>
+      <ul>
+        <li>Which surf level are the lessons built for, and how big are the groups?</li>
+        <li>How many yoga or wellness sessions are included, and at what times?</li>
+        <li>Which meals, transfers and board rentals are included?</li>
+      </ul>
+    </section>
+
+    <section class="section o5" aria-labelledby="more-h">
+      <h2 id="more-h" class="section-head">Other surf-and-wellness destinations</h2>
+      <ul class="link-list">
+        {others.map((o) => <li><a href={retreatPath(o)}><strong>{o.data.name}</strong><span>{o.data.bestFor}</span></a></li>)}
+      </ul>
+    </section>
+
+    <section class="section o2">
+      <CtaBand
+        heading={`Plan a surf-and-wellness week in ${dest.data.name}`}
+        text="Share your surf level, dates and the kind of wellness you want, and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="retreat"
+        entity={dest.id}
+        partnerPath={dest.data.partnerPath}
+      />
+    </section>
+  </main>
+</Base>

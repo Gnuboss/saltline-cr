@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }];
+---
+<Base
+  title="About"
+  path="/about/"
+  description={`${site.name} is a Costa Rica surf and wellness travel guide that sends planning requests to a local travel agency.`}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">About</span>
+      <h1>About {site.name}</h1>
+      <p class="lede">{site.name} is a Costa Rica surf and wellness travel guide. We organize the country's breaks, destinations and seasons so you can find the right place for your level, then pass your trip request to a local travel agency that plans and books it.</p>
+    </header>
+    <section class="section prose">
+      <h2>What we do</h2>
+      <p>We write and maintain the guides on this site, and we keep the facts in one place so they stay consistent. When you are ready to plan a trip, you can send a request through the quote form or follow a link to our travel partner.</p>
+      <h2>What we do not do</h2>
+      <p>We do not sell trips ourselves. Bookings, payments and changes are handled by our travel partner. Read <a href="/how-we-work/">how we work</a> for the details of that relationship.</p>
+    </section>
+  </main>
+</Base>

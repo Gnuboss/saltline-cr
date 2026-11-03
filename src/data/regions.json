@@ -1,0 +1,52 @@
+[
+  {
+    "id": "guanacaste",
+    "name": "Guanacaste",
+    "order": 1,
+    "coast": "North Pacific",
+    "summary": "Guanacaste is Costa Rica's north Pacific surf coast, built around Tamarindo's surf schools and the boat-access breaks of Santa Rosa National Park.",
+    "season": "Waves work year-round. The green season, May to November, generally brings the bigger Pacific swells.",
+    "airports": ["Liberia (LIR)"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "nicoya",
+    "name": "Nicoya Peninsula",
+    "order": 2,
+    "coast": "North Pacific",
+    "summary": "The Nicoya Peninsula pairs consistent beach breaks with a strong wellness scene, centred on Nosara and Santa Teresa.",
+    "season": "Waves work year-round. The green season, May to November, generally brings the bigger Pacific swells.",
+    "airports": ["Liberia (LIR)", "San José (SJO)"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "central-pacific",
+    "name": "Central Pacific",
+    "order": 3,
+    "coast": "Central Pacific",
+    "summary": "The Central Pacific is the closest surf coast to San José, with Jacó's beginner-friendly waves, Playa Hermosa's heavier beach break and the long left at Barranca.",
+    "season": "Waves work year-round. The green season, May to November, generally brings the bigger Pacific swells.",
+    "airports": ["San José (SJO)"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "south-pacific",
+    "name": "South Pacific",
+    "order": 4,
+    "coast": "South Pacific",
+    "summary": "The South Pacific runs from Dominical's river-split beach breaks to Pavones, known as one of the longest left-hand waves in the world.",
+    "season": "Waves work year-round. The green season, May to November, generally brings the bigger Pacific swells.",
+    "airports": ["San José (SJO)"],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "caribbean",
+    "name": "Caribbean",
+    "order": 5,
+    "coast": "Caribbean",
+    "summary": "The Caribbean coast has one headline wave, the expert-only Salsa Brava reef break at Puerto Viejo.",
+    "season": "Its best season runs opposite to the Pacific, generally the northern-hemisphere winter months.",
+    "airports": ["San José (SJO)"],
+    "updated": "2026-11-02"
+  }
+]

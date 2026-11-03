@@ -1,0 +1,35 @@
+---
+import { site } from '../config';
+
+interface Props {
+  seed: string;
+  alt: string;
+  ratio?: string;
+  width?: number;
+  eager?: boolean;
+  class?: string;
+}
+const { seed, alt, ratio = '4/3', width = 800, eager = false, class: cls = '' } = Astro.props;
+const [rw, rh] = ratio.split('/').map(Number);
+const height = Math.round((width * rh) / rw);
+---
+<div class={`photo ${cls}`} style={`aspect-ratio:${rw}/${rh}`}>
+  {
+    site.placeholderPhotos ? (
+      <>
+        <img
+          src={`https://picsum.photos/seed/${seed}/${width}/${height}`}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+        <span class="photo-badge">Placeholder photo</span>
+      </>
+    ) : (
+      <div class="photo-fallback" role="img" aria-label={alt}></div>
+    )
+  }
+  <slot />
+</div>

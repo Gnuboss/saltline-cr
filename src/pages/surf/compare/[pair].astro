@@ -1,0 +1,83 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { loadAll, comparePath, destPath, levelText, regionPath } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const { comparisons } = await loadAll();
+  return comparisons.map((c) => ({ params: { pair: c.id }, props: { c } }));
+}
+
+const { c } = Astro.props;
+const { destById, regionById } = await loadAll();
+const a = destById.get(c.data.a.id)!;
+const b = destById.get(c.data.b.id)!;
+const path = comparePath(c);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: `${a.data.name} vs ${b.data.name}`, path },
+];
+
+const rows: [string, (d: typeof a) => string | undefined][] = [
+  ['Region', (d) => regionById.get(d.data.region.id)?.data.name],
+  ['Surf style', (d) => d.data.surfStyle],
+  ['Level', (d) => levelText(d.data.levelMix)],
+  ['Best for', (d) => d.data.bestFor],
+  ['Wellness', (d) => d.data.wellness ?? 'Not a focus'],
+  ['Nearest airport', (d) => d.data.nearestAirport],
+];
+---
+<Base
+  title={`${a.data.name} vs ${b.data.name}: which Costa Rica surf town?`}
+  path={path}
+  description={c.data.verdict}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Compare</span>
+      <h1>{a.data.name} vs {b.data.name}</h1>
+      <p class="lede">{c.data.verdict}</p>
+    </header>
+
+    <section class="section" aria-labelledby="table-h">
+      <h2 id="table-h" class="section-head">Side by side</h2>
+      <div class="compare-wrap">
+        <table class="facts compare">
+          <thead>
+            <tr>
+              <th scope="col"><span class="mono">Fact</span></th>
+              <th scope="col"><a href={destPath(a)}>{a.data.name}</a></th>
+              <th scope="col"><a href={destPath(b)}>{b.data.name}</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([label, fn]) => <tr><th scope="row">{label}</th><td>{fn(a)}</td><td>{fn(b)}</td></tr>)}
+          </tbody>
+          <tfoot><tr><td colspan="3" class="unverified">Draft: not yet verified with our travel partner</td></tr></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="section prose" aria-labelledby="read-h">
+      <h2 id="read-h">Read the full guides</h2>
+      <ul>
+        <li><a href={destPath(a)}>Surf {a.data.name}</a></li>
+        <li><a href={destPath(b)}>Surf {b.data.name}</a></li>
+        <li><a href="/retreats/">Surf and wellness retreats</a></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <CtaBand
+        heading={`Decide between ${a.data.name} and ${b.data.name}`}
+        text="Tell us your level, dates and what else you want from the trip, and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="compare"
+        entity={c.id}
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

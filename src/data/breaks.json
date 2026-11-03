@@ -1,0 +1,71 @@
+[
+  {
+    "id": "playa-guiones",
+    "name": "Playa Guiones",
+    "destination": "nosara",
+    "summary": "A long, sandy beach break at Nosara with lefts and rights and consistent surf through the year.",
+    "type": "Beach break",
+    "direction": "Lefts and rights",
+    "level": ["beginner", "intermediate"],
+    "swell": "Can reach about 10 ft on bigger swells",
+    "season": "Year-round",
+    "hazards": "Rip currents, as at any open beach break",
+    "access": "Walk from the beach",
+    "page": true,
+    "body": [
+      "Playa Guiones is the long, sandy beach at the heart of Nosara on the Nicoya Peninsula, and it is known for consistent surf. Waves break both left and right along its length, so there is rarely a single crowded peak. Surfers spread out along the beach and pick the section that suits their level.",
+      "The sandy bottom is forgiving, which is why the beach works for first-timers and for surfers building confidence. Waves here can reach about ten feet on bigger swells, so conditions vary: a small morning can turn into a serious afternoon. Ask your instructor or guesthouse host for the day's read before you paddle out.",
+      "Surf lessons and board rentals are easy to arrange in Nosara, and many surf schools run morning sessions when the wind is lighter. Plan your first session in a small-to-medium swell, take a lesson, and move on to independent sessions once you can read the line-up.",
+      "Rip currents are a feature of any open beach break, so learn how to spot them and swim parallel to shore if you are caught in one. Respect local surfers, give way to the person closest to the peak, and keep your board under control in the whitewater.",
+      "Nosara is also known for yoga and wellness. Many visitors surf at dawn and spend the afternoon at a class, a spa or a retreat, which is why the town is a natural base for a surf-and-wellness week. If that sounds like your trip, see the Nosara retreat guide."
+    ],
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "witchs-rock",
+    "name": "Witch's Rock",
+    "destination": "santa-rosa-np",
+    "summary": "A famous beach break at Santa Rosa National Park, reached by boat from Tamarindo.",
+    "type": "Beach break",
+    "level": ["intermediate", "advanced"],
+    "access": "Boat from Tamarindo",
+    "page": false,
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "ollies-point",
+    "name": "Ollie's Point",
+    "destination": "santa-rosa-np",
+    "summary": "A right-hand point break at Santa Rosa National Park, also reached by boat.",
+    "type": "Point break",
+    "direction": "Right",
+    "level": ["intermediate", "advanced"],
+    "access": "Boat from Tamarindo",
+    "page": false,
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "pavones",
+    "name": "Pavones",
+    "destination": "pavones",
+    "summary": "A very long left-hand point break on the Golfo Dulce.",
+    "type": "Point break",
+    "direction": "Left",
+    "level": ["advanced"],
+    "access": "Long drive from the airport",
+    "page": false,
+    "updated": "2026-11-02"
+  },
+  {
+    "id": "salsa-brava",
+    "name": "Salsa Brava",
+    "destination": "puerto-viejo",
+    "summary": "A powerful reef break over shallow coral; expert-only, and many surfers wear helmets.",
+    "type": "Reef break",
+    "level": ["advanced", "expert"],
+    "hazards": "Shallow reef",
+    "access": "Paddle out from Puerto Viejo",
+    "page": false,
+    "updated": "2026-11-02"
+  }
+]

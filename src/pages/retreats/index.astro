@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import DestinationCard from '../../components/DestinationCard.astro';
+import { loadAll } from '../../lib/site';
+
+const { destinations } = await loadAll();
+const retreats = destinations.filter((d) => d.data.retreat);
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Retreats', path: '/retreats/' }];
+---
+<Base
+  title="Surf and wellness retreats in Costa Rica"
+  path="/retreats/"
+  description="Pair surfing with yoga, spas and wellness in Nosara, Santa Teresa and Uvita. How a surf-and-wellness week works and what to ask before you book."
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap stack">
+    <header class="page-head o1">
+      <span class="eyebrow">Retreats</span>
+      <h1>Surf and wellness retreats</h1>
+      <p class="lede">Surf and wellness go together: a morning session in the water, an afternoon yoga class or spa treatment, and an early night. Three Costa Rica destinations are known for this pairing.</p>
+    </header>
+
+    <section class="section o3" aria-labelledby="dests-h">
+      <h2 id="dests-h" class="section-head">Where to go</h2>
+      <div class="grid grid-3">
+        {retreats.map((d) => <DestinationCard dest={d} />)}
+      </div>
+    </section>
+
+    <section class="section o4 prose" aria-labelledby="how-h">
+      <h2 id="how-h">How a surf-and-wellness week works</h2>
+      <p>Most weeks follow the same rhythm. You surf early, when conditions are usually friendlier, then spend the rest of the day on yoga, a spa treatment, a swim or time to recover. Some programs bundle lessons, classes, meals and accommodation, while others let you book each piece separately.</p>
+      <h3>What to ask before you book</h3>
+      <ul>
+        <li>Which surf level are the lessons built for, and how big are the groups?</li>
+        <li>How many yoga or wellness sessions are included, and at what times?</li>
+        <li>Which meals, transfers and board rentals are included?</li>
+        <li>What happens if the surf is flat or too big on the day?</li>
+      </ul>
+    </section>
+
+    <section class="section o2">
+      <CtaBand
+        heading="Tell us what you want from the week"
+        text="Share your surf level, dates and the kind of wellness you want, and we pass your request to our Costa Rica travel partner."
+        from="/retreats/"
+        template="retreat-hub"
+        entity="retreats"
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

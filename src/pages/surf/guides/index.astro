@@ -1,0 +1,30 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { loadAll, guidePath } from '../../../lib/site';
+
+const { guides } = await loadAll();
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: 'Guides', path: '/surf/guides/' },
+];
+---
+<Base
+  title="Costa Rica surf trip guides"
+  path="/surf/guides/"
+  description="Planning guides for surf trips to Costa Rica: where to base yourself, when to go and what to book first."
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Guides</span>
+      <h1>Surf trip guides</h1>
+      <p class="lede">Practical planning guides for surf trips to Costa Rica.</p>
+    </header>
+    <section class="section">
+      <ul class="link-list">
+        {guides.map((g) => <li><a href={guidePath(g)}><strong>{g.data.title}</strong><span>{g.data.description}</span></a></li>)}
+      </ul>
+    </section>
+  </main>
+</Base>

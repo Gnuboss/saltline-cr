@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../config';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Get a quote', path: '/quote/' }];
+const next = new URL('/quote/thanks/', site.url).toString();
+const placeholder = site.quote.endpoint.includes('REPLACE');
+---
+<Base
+  title="Get a trip quote"
+  path="/quote/"
+  description="Tell us your surf level, dates and interests and we pass your request to our Costa Rica travel partner."
+  breadcrumbs={crumbs}
+  noindex
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Get a quote</span>
+      <h1>Tell us about your trip</h1>
+      <p class="lede">Share a few details and we pass your request to our Costa Rica travel partner, who replies with a plan and a price.</p>
+    </header>
+
+    <section class="section">
+      {
+        placeholder && (
+          <p class="form-warn">Setup needed: set <code>site.quote.endpoint</code> in <code>src/config.ts</code> to the inbox that should receive leads. Until then this form will not deliver.</p>
+        )
+      }
+      <form class="form" method="POST" action={site.quote.endpoint} data-quote>
+        <label>Name<input type="text" name="name" autocomplete="name" required /></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+        <div class="row">
+          <label>When are you thinking of going?<input type="text" name="dates" placeholder="For example, March, or 5 to 12 May" /></label>
+          <label>Travelers
+            <select name="travelers">
+              <option>1</option><option>2</option><option>3 to 4</option><option>5 or more</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Surf level
+            <select name="level">
+              <option value="">Not sure</option>
+              <option>Never surfed</option>
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </label>
+          <label>What do you want from the trip?
+            <select name="interest">
+              <option>Surf</option>
+              <option>Surf and yoga</option>
+              <option>Surf and wellness</option>
+              <option>Surf and other activities</option>
+            </select>
+          </label>
+        </div>
+        <label>Anything else we should know?<textarea name="message"></textarea></label>
+
+        <label class="consent">
+          <input type="checkbox" name="consent" value="yes" required />
+          <span>I agree that my details are shared with {site.partner.name} so they can reply with a quote. See the <a href="/privacy/">privacy page</a>.</span>
+        </label>
+
+        <input type="hidden" name="source_page" />
+        <input type="hidden" name="template" />
+        <input type="hidden" name="entity" />
+        <input type="hidden" name="landing_page" />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_content" />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="_subject" value="New Salt Line CR quote request" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_next" value={next} />
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <button class="btn btn-primary" type="submit">Send my request</button>
+      </form>
+    </section>
+  </main>
+</Base>

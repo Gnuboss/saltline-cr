@@ -1,0 +1,124 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import CtaBand from '../../../../components/CtaBand.astro';
+import FactTable from '../../../../components/FactTable.astro';
+import {
+  loadAll, destPath, regionPath, breakPath, retreatPath, levelText, nearby, absolute,
+} from '../../../../lib/site';
+
+export async function getStaticPaths() {
+  const { destinations } = await loadAll();
+  return destinations.map((d) => ({
+    params: { region: d.data.region.id, destination: d.id },
+    props: { dest: d },
+  }));
+}
+
+const { dest } = Astro.props;
+const { regionById, breaks, destinations, destById } = await loadAll();
+const region = regionById.get(dest.data.region.id)!;
+const path = destPath(dest);
+const here = breaks.filter((b) => b.data.destination.id === dest.id);
+const near = nearby(dest, destinations);
+
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: region.data.name, path: regionPath(region) },
+  { name: dest.data.name, path },
+];
+
+const place: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristDestination',
+  name: dest.data.name,
+  description: dest.data.summary,
+  url: absolute(path),
+  containedInPlace: { '@type': 'Place', name: `${region.data.name}, Costa Rica` },
+};
+if (dest.data.lat && dest.data.lng) {
+  place.geo = { '@type': 'GeoCoordinates', latitude: dest.data.lat, longitude: dest.data.lng };
+}
+---
+<Base
+  title={`Surf ${dest.data.name}, Costa Rica`}
+  path={path}
+  description={dest.data.summary}
+  breadcrumbs={crumbs}
+  schema={[place]}
+>
+  <main id="main" class="wrap stack">
+    <!-- DOM order: answer, facts, body, breaks, neighbours, CTA. Visual order lifts the CTA to second. -->
+    <header class="page-head o1">
+      <span class="eyebrow">{region.data.name}</span>
+      <h1>Surf {dest.data.name}</h1>
+      <p class="lede">{dest.data.summary}</p>
+    </header>
+
+    <section class="section o3" aria-labelledby="facts-h">
+      <h2 id="facts-h" class="section-head">At a glance</h2>
+      <FactTable
+        rows={[
+          ['Region', region.data.name],
+          ['Surf style', dest.data.surfStyle],
+          ['Level', levelText(dest.data.levelMix)],
+          ['Best for', dest.data.bestFor],
+          ['Wellness', dest.data.wellness],
+          ['Nearest airport', dest.data.nearestAirport],
+          ['Season', region.data.season],
+        ]}
+        verified={dest.data.verified}
+      />
+    </section>
+
+    <section class="section o4 prose" aria-labelledby="about-h">
+      <h2 id="about-h">About {dest.data.name}</h2>
+      {dest.data.body.map((p) => <p>{p}</p>)}
+      {
+        dest.data.retreat && (
+          <p>
+            {dest.data.name} pairs well with yoga and wellness. See the{' '}
+            <a href={retreatPath(dest)}>{dest.data.name} surf and wellness guide</a>.
+          </p>
+        )
+      }
+    </section>
+
+    {
+      here.length > 0 && (
+        <section class="section o5" aria-labelledby="breaks-h">
+          <h2 id="breaks-h">Breaks at {dest.data.name}</h2>
+          <div class="sections-inline">
+            {here.map((b) => (
+              <div class="break-section" id={b.id}>
+                <h3>{b.data.page ? <a href={breakPath(b, dest)}>{b.data.name}</a> : b.data.name}</h3>
+                <p>{b.data.summary}</p>
+                <p class="meta">
+                  {[b.data.type, b.data.direction, levelText(b.data.level), b.data.access].filter(Boolean).join(' · ')}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section o6" aria-labelledby="near-h">
+      <h2 id="near-h" class="section-head">Also consider</h2>
+      <ul class="link-list">
+        {near.map((n) => <li><a href={destPath(n)}><strong>{n.data.name}</strong><span>{n.data.summary}</span></a></li>)}
+      </ul>
+    </section>
+
+    <section class="section o2">
+      <CtaBand
+        heading={`Plan a surf trip to ${dest.data.name}`}
+        text={`Tell us your level and dates and we pass your request to our Costa Rica travel partner, who plans the stay, lessons and transfers.`}
+        from={path}
+        template="destination"
+        entity={dest.id}
+        partnerPath={dest.data.partnerPath}
+      />
+    </section>
+  </main>
+</Base>

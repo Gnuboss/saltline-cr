@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import DestinationCard from '../components/DestinationCard.astro';
+import { site } from '../config';
+import { loadAll, destPath, regionPath, breakPath, levelText, quoteUrl, absolute } from '../lib/site';
+
+const { regions, destinations, breaks, destById } = await loadAll();
+const featured = ['nosara', 'santa-teresa', 'tamarindo'].map((id) => destById.get(id)!);
+const quote = quoteUrl('/', 'home', 'home');
+
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: absolute('/') },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: site.name, url: absolute('/') },
+];
+---
+<Base
+  title=""
+  path="/"
+  description="Surf, yoga and wellness trips in Costa Rica, matched to your level and planned with a Costa Rica travel agency. Browse regions, breaks and seasons."
+  schema={schema}
+>
+  <!--
+    DOM ORDER vs VISUAL ORDER
+    The taxonomy (#guide) is first in the source so crawlers and answer engines read the
+    region and destination hierarchy first. CSS `order` puts the hero and booking modules on top
+    for visitors. Nothing is hidden.
+  -->
+  <main id="main" class="stack">
+    <section class="guide-block o6" id="guide" aria-labelledby="guide-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">The guide</span>
+          <h2 id="guide-h">Costa Rica surf, organized by coast, destination and skill level</h2>
+          <p class="lede">Costa Rica has surf on two coasts. The Pacific runs from the north of Guanacaste to the Golfo Dulce and has a wave for almost every level, while the Caribbean adds one heavy reef break at Puerto Viejo.</p>
+        </div>
+        {
+          regions.map((r) => (
+            <div class="region-block">
+              <h2><a href={regionPath(r)}>{r.data.name}</a></h2>
+              <p>{r.data.summary}</p>
+              <ul class="dest-list">
+                {destinations
+                  .filter((d) => d.data.region.id === r.id)
+                  .map((d) => (
+                    <li>
+                      <a href={destPath(d)}>
+                        <strong>{d.data.name}</strong>
+                        <span>{d.data.surfStyle} · {levelText(d.data.levelMix)}</span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="hero o1" aria-labelledby="hero-h">
+      <Photo seed="home-hero" alt="Placeholder photo of a surfer at a Costa Rica beach at golden hour" ratio="4/3" width={1600} eager />
+      <div class="wrap hero-content">
+        <span class="eyebrow">Costa Rica · Surf, yoga and wellness</span>
+        <h1 id="hero-h">Find your <em>break.</em><br />Plan it with locals.</h1>
+        <p class="hero-sub">Surf and wellness trips along Costa Rica's Pacific and Caribbean coasts, matched to your level and planned with a Costa Rica travel agency.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={quote} data-track="quote" data-template="home" data-entity="home">Get a trip quote</a>
+          <a class="btn btn-ghost" href="#break-index">See the break index</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="index-band o2" id="break-index" aria-labelledby="idx-h">
+      <div class="wrap">
+        <div class="index-head">
+          <h2 id="idx-h">Break index</h2>
+          <p class="index-note">Named breaks, listed the way a local surf guide would brief a visitor. Details are drafts until verified.</p>
+        </div>
+        <table class="index">
+          <thead>
+            <tr><th scope="col">Break</th><th scope="col">Type</th><th scope="col">Level</th><th scope="col">Access</th></tr>
+          </thead>
+          <tbody>
+            {
+              breaks.map((b) => {
+                const d = destById.get(b.data.destination.id)!;
+                const href = b.data.page ? breakPath(b, d) : destPath(d);
+                return (
+                  <tr>
+                    <td>
+                      <a href={href}>
+                        <span class="idx-name">{b.data.name}</span>
+                        <span class="idx-sub">{d.data.name} · {regions.find((r) => r.id === d.data.region.id)?.data.name}</span>
+                      </a>
+                    </td>
+                    <td>{b.data.type}</td>
+                    <td>{levelText(b.data.level)}</td>
+                    <td>{b.data.access}</td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section o3" aria-labelledby="start-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Where to start</span>
+          <h2 id="start-h">Three good bases for a first trip</h2>
+        </div>
+        <div class="grid grid-3">
+          {featured.map((d) => <DestinationCard dest={d} />)}
+        </div>
+      </div>
+    </section>
+
+    <section class="o4" aria-label="Surf regions">
+      <div class="strip">
+        {
+          regions.map((r) => (
+            <a href={regionPath(r)}>
+              <Photo seed={`region-${r.id}`} alt={`Placeholder photo for ${r.data.name}`} ratio="3/4" width={480} />
+              <span class="label">{r.data.name}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="trust o5" aria-labelledby="trust-h">
+      <div class="wrap trust-inner">
+        <div class="trust-copy">
+          <span class="eyebrow">Who books it</span>
+          <h2 id="trust-h">Planned locally, booked through a Costa Rica travel agency</h2>
+          <p>Trips on this site are booked through a Costa Rica–based travel partner with its own guides, drivers and hotel relationships, not a booking marketplace. Tell us what you want and we pass your request on.</p>
+        </div>
+        <div class="trust-cta">
+          <a class="btn btn-primary" href={quote} data-track="quote" data-template="home" data-entity="home-trust">Get a trip quote</a>
+          <a class="btn btn-ghost" href="/how-we-work/">How we work</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>

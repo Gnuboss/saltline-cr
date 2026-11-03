@@ -1,0 +1,74 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import DestinationCard from '../../../components/DestinationCard.astro';
+import FactTable from '../../../components/FactTable.astro';
+import { loadAll, regionPath } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const { regions } = await loadAll();
+  return regions.map((r) => ({ params: { region: r.id }, props: { region: r } }));
+}
+
+const { region } = Astro.props;
+const { destinations } = await loadAll();
+const dests = destinations.filter((d) => d.data.region.id === region.id);
+const path = regionPath(region);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: region.data.name, path },
+];
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `Surf in ${region.data.name}, Costa Rica`,
+    description: region.data.summary,
+  },
+];
+---
+<Base
+  title={`Surf in ${region.data.name}, Costa Rica`}
+  path={path}
+  description={region.data.summary}
+  breadcrumbs={crumbs}
+  schema={schema}
+>
+  <main id="main" class="wrap stack">
+    <header class="page-head o1">
+      <span class="eyebrow">{region.data.coast}</span>
+      <h1>Surf in {region.data.name}</h1>
+      <p class="lede">{region.data.summary}</p>
+    </header>
+
+    <section class="section o3" aria-labelledby="dests-h">
+      <h2 id="dests-h" class="section-head">Destinations in {region.data.name}</h2>
+      <div class="grid grid-3">
+        {dests.map((d) => <DestinationCard dest={d} />)}
+      </div>
+    </section>
+
+    <section class="section o4" aria-labelledby="facts-h">
+      <h2 id="facts-h" class="section-head">Season and getting there</h2>
+      <FactTable
+        rows={[
+          ['Coast', region.data.coast],
+          ['Season', region.data.season],
+          ['Nearest airport', region.data.airports.join(', ')],
+        ]}
+      />
+    </section>
+
+    <section class="section o2">
+      <CtaBand
+        heading={`Planning a trip to ${region.data.name}?`}
+        text="Tell us your level and dates and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="region"
+        entity={region.id}
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

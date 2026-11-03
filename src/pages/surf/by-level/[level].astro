@@ -1,0 +1,116 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { loadAll, destPath, breakPath, levelPath, levelText } from '../../../lib/site';
+
+const copy: Record<string, { title: string; lede: string; tips: string[] }> = {
+  beginner: {
+    title: 'Beginner surf breaks in Costa Rica',
+    lede: 'Beginner-friendly surf in Costa Rica means sandy beach breaks, gentle whitewater and a surf school on the beach. These destinations suit first-timers and surfers who are still building confidence.',
+    tips: [
+      'Choose a sandy beach break over reef or rock.',
+      'Book a lesson for your first day or two.',
+      'Surf in the morning, when conditions are usually friendlier.',
+    ],
+  },
+  intermediate: {
+    title: 'Intermediate surf breaks in Costa Rica',
+    lede: 'Intermediate surfers can already read a wave and paddle into it unaided. These destinations add power, variety and a bit more commitment without needing expert-level experience.',
+    tips: [
+      'Check the day\'s swell and tide with a local before heading out.',
+      'Try different wave types: beach, river mouth and point.',
+      'Consider a guided boat day to reach breaks that are hard to get to.',
+    ],
+  },
+  advanced: {
+    title: 'Advanced and expert surf breaks in Costa Rica',
+    lede: 'Advanced and expert surfing in Costa Rica means long point waves, shallow reef and heavier beach breaks. Most of these call for experience, local knowledge and the right equipment.',
+    tips: [
+      'Watch a break before you paddle out, and ask locals about the day.',
+      'Some reef breaks call for a helmet.',
+      'Allow extra travel days for remote breaks.',
+    ],
+  },
+};
+
+export async function getStaticPaths() {
+  return ['beginner', 'intermediate', 'advanced'].map((level) => ({ params: { level }, props: { level } }));
+}
+
+const { level } = Astro.props;
+const { destinations, breaks, destById, regionById } = await loadAll();
+const dests = destinations.filter((d) => d.data.levelMix.includes(level as any));
+const levelBreaks = breaks.filter((b) =>
+  (b.data.level ?? []).some((l) => l === level || (level === 'advanced' && l === 'expert')),
+);
+const c = copy[level];
+const path = levelPath(level);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Surf', path: '/surf/' },
+  { name: level === 'advanced' ? 'Advanced and expert' : level[0].toUpperCase() + level.slice(1), path },
+];
+---
+<Base title={c.title} path={path} description={c.lede.split('.')[0] + '.'} breadcrumbs={crumbs}>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">By skill level</span>
+      <h1>{c.title}</h1>
+      <p class="lede">{c.lede}</p>
+    </header>
+
+    <section class="section" aria-labelledby="dests-h">
+      <h2 id="dests-h" class="section-head">Destinations that suit this level</h2>
+      <ul class="link-list">
+        {
+          dests.map((d) => (
+            <li>
+              <a href={destPath(d)}>
+                <strong>{d.data.name}, {regionById.get(d.data.region.id)?.data.name}</strong>
+                <span>{d.data.summary}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      levelBreaks.length > 0 && (
+        <section class="section" aria-labelledby="breaks-h">
+          <h2 id="breaks-h" class="section-head">Named breaks at this level</h2>
+          <ul class="link-list">
+            {levelBreaks.map((b) => {
+              const d = destById.get(b.data.destination.id)!;
+              return (
+                <li>
+                  <a href={b.data.page ? breakPath(b, d) : destPath(d) + '#' + b.id}>
+                    <strong>{b.data.name}, {d.data.name}</strong>
+                    <span>{b.data.summary}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section prose" aria-labelledby="tips-h">
+      <h2 id="tips-h">Tips at this level</h2>
+      <ul>{c.tips.map((t) => <li>{t}</li>)}</ul>
+      <p>Other levels: {['beginner', 'intermediate', 'advanced'].filter((l) => l !== level).map((l, i) => <>{i > 0 && ' · '}<a href={levelPath(l)}>{l[0].toUpperCase() + l.slice(1)}</a></>)}</p>
+    </section>
+
+    <section class="section">
+      <CtaBand
+        heading="Match a trip to your level"
+        text="Tell us how much you have surfed and we pass your request to our Costa Rica travel partner."
+        from={path}
+        template="by-level"
+        entity={level}
+        partnerPath="/surfing/"
+      />
+    </section>
+  </main>
+</Base>

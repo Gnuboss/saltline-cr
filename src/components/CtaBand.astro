@@ -1,0 +1,49 @@
+---
+import { partnerUrl, quoteUrl } from '../lib/site';
+
+// One primary CTA per screen. Destination, retreat and guide pages lead with the quote form;
+// stay, program and trip pages lead with the tracked partner link (see the architecture doc).
+interface Props {
+  heading: string;
+  text: string;
+  from: string;
+  template: string;
+  entity: string;
+  lead?: 'quote' | 'partner';
+  partnerPath?: string;
+  partnerLabel?: string;
+}
+const {
+  heading,
+  text,
+  from,
+  template,
+  entity,
+  lead = 'quote',
+  partnerPath,
+  partnerLabel = 'See it with our travel partner',
+} = Astro.props;
+const quote = quoteUrl(from, template, entity);
+const partner = partnerUrl(partnerPath, template, entity);
+---
+<section class="cta-band" aria-labelledby={`cta-${entity}`}>
+  <div class="cta-copy">
+    <h2 id={`cta-${entity}`}>{heading}</h2>
+    <p>{text}</p>
+  </div>
+  <div class="cta-actions">
+    {
+      lead === 'quote' ? (
+        <>
+          <a class="btn btn-primary" href={quote} data-track="quote" data-template={template} data-entity={entity}>Get a trip quote</a>
+          <a class="btn btn-ghost" href={partner} rel="sponsored noopener" target="_blank" data-track="affiliate" data-template={template} data-entity={entity}>{partnerLabel}</a>
+        </>
+      ) : (
+        <>
+          <a class="btn btn-primary" href={partner} rel="sponsored noopener" target="_blank" data-track="affiliate" data-template={template} data-entity={entity}>{partnerLabel}</a>
+          <a class="btn btn-ghost" href={quote} data-track="quote" data-template={template} data-entity={entity}>Get a trip quote</a>
+        </>
+      )
+    }
+  </div>
+</section>

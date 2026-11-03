@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import {
+  loadAll, regionPath, destPath, breakPath, retreatPath, levelPath, seasonPath, comparePath, guidePath,
+} from '../lib/site';
+
+const { regions, destinations, breaks, seasons, comparisons, guides, destById } = await loadAll();
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Sitemap', path: '/sitemap/' }];
+---
+<Base
+  title="Sitemap"
+  path="/sitemap/"
+  description="Every region, destination, break, guide and planning page on the site."
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Sitemap</span>
+      <h1>Sitemap</h1>
+    </header>
+
+    <section class="section prose">
+      <h2><a href="/surf/">Surf</a></h2>
+      <ul>
+        {
+          regions.map((r) => (
+            <li>
+              <a href={regionPath(r)}>{r.data.name}</a>
+              <ul>
+                {destinations
+                  .filter((d) => d.data.region.id === r.id)
+                  .map((d) => (
+                    <li>
+                      <a href={destPath(d)}>{d.data.name}</a>
+                      {breaks.filter((b) => b.data.destination.id === d.id && b.data.page).length > 0 && (
+                        <ul>
+                          {breaks
+                            .filter((b) => b.data.destination.id === d.id && b.data.page)
+                            .map((b) => <li><a href={breakPath(b, d)}>{b.data.name}</a></li>)}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>Plan by level, season and comparison</h2>
+      <ul>
+        <li><a href={levelPath('beginner')}>Beginner breaks</a></li>
+        <li><a href={levelPath('intermediate')}>Intermediate breaks</a></li>
+        <li><a href={levelPath('advanced')}>Advanced and expert breaks</a></li>
+        {seasons.map((s) => <li><a href={seasonPath(s)}>{s.data.name}</a></li>)}
+        {comparisons.map((c) => <li><a href={comparePath(c)}>{destById.get(c.data.a.id)?.data.name} vs {destById.get(c.data.b.id)?.data.name}</a></li>)}
+      </ul>
+
+      <h2><a href="/retreats/">Retreats</a></h2>
+      <ul>
+        {destinations.filter((d) => d.data.retreat).map((d) => <li><a href={retreatPath(d)}>{d.data.name}</a></li>)}
+      </ul>
+
+      <h2><a href="/surf/guides/">Guides</a></h2>
+      <ul>
+        {guides.map((g) => <li><a href={guidePath(g)}>{g.data.title}</a></li>)}
+      </ul>
+
+      <h2>Site</h2>
+      <ul>
+        <li><a href="/quote/">Get a quote</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/how-we-work/">How we work</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
+    </section>
+  </main>
+</Base>

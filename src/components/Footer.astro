@@ -1,0 +1,47 @@
+---
+import { loadAll, regionPath, seasonPath } from '../lib/site';
+import { site } from '../config';
+const { regions, seasons } = await loadAll();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Surf by region</h4>
+        <ul>{regions.map((r) => <li><a href={regionPath(r)}>{r.data.name}</a></li>)}</ul>
+      </div>
+      <div>
+        <h4>Plan your trip</h4>
+        <ul>
+          <li><a href="/surf/by-level/beginner/">Beginner breaks</a></li>
+          <li><a href="/surf/by-level/intermediate/">Intermediate breaks</a></li>
+          <li><a href="/surf/by-level/advanced/">Advanced breaks</a></li>
+          {seasons.map((s) => <li><a href={seasonPath(s)}>{s.data.name}</a></li>)}
+          <li><a href="/surf/compare/nosara-vs-santa-teresa/">Nosara vs Santa Teresa</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Retreats</h4>
+        <ul>
+          <li><a href="/retreats/">Surf and wellness retreats</a></li>
+          <li><a href="/retreats/nosara/">Nosara</a></li>
+          <li><a href="/retreats/santa-teresa/">Santa Teresa</a></li>
+          <li><a href="/retreats/uvita/">Uvita</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>{site.name}</h4>
+        <ul>
+          <li><a href="/quote/">Get a quote</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/how-we-work/">How we work</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/sitemap/">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="foot-legal">
+      Some links on this site are affiliate links to {site.partner.name}. If you book through them we may earn a commission at no extra cost to you. See <a href="/how-we-work/">how we work</a>.
+    </p>
+  </div>
+</footer>

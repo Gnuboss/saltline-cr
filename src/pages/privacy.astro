@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Privacy', path: '/privacy/' }];
+---
+<Base
+  title="Privacy"
+  path="/privacy/"
+  description={`What ${site.name} collects when you use the site or send a quote request, and who we share it with.`}
+  breadcrumbs={crumbs}
+>
+  <main id="main" class="wrap">
+    <header class="page-head">
+      <span class="eyebrow">Privacy</span>
+      <h1>Privacy</h1>
+      <p class="lede">This page explains what we collect when you use {site.name} or send a quote request, and who we share it with.</p>
+    </header>
+    <section class="section prose">
+      <h2>Quote requests</h2>
+      <p>When you send a quote request we collect the details you type into the form (such as your name, email, dates and surf level). We also record which page you were on and how you reached the site, so we can see which guides are useful. We share the request with {site.partner.name} so they can reply to you.</p>
+      <h2>Links to our travel partner</h2>
+      <p>When you click a link to our travel partner, the link carries a short tag that tells them which page sent you. They handle your booking and personal data under their own policies.</p>
+      <h2>What we do not do</h2>
+      <p>We do not sell your personal data.</p>
+      <h2>Your choices</h2>
+      <p>You can ask us to delete a quote request you have sent. Contact us at [add a contact email before launch].</p>
+      <p class="mono" style="font-size:12px">Working draft: have this page reviewed for the markets you target before launch.</p>
+    </section>
+  </main>
+</Base>
